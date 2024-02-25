@@ -23,11 +23,11 @@ public class Stuff {
                     throw new ImpossibleSizeException();
                 } catch (ImpossibleSizeException e) {
                     System.out.println("\u001B[31mНедопустимый размер. Заменён на 0.01 фут\u001B[0m");
-                    ft_height = 0.01;
+                    ft_height = e.getFt_height();
                 }
             }
 
-            if (ft_height < 1) {
+            if (ft_height > 0 && ft_height < 1) {
                 setSize(Size.SMALL);
             } else if (ft_height >=1 && ft_height < 3){
                 setSize(Size.MIDDLE);
@@ -35,7 +35,7 @@ public class Stuff {
                 setSize(Size.BIG);
             } else  setSize(Size.HUGE);
     }
-    public void setSize(Size size){
+    private void setSize(Size size){
         this.size = size;
     }
     public Size getSize(){

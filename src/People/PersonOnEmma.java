@@ -20,7 +20,7 @@ public class PersonOnEmma extends Human implements Die {
 
     }
 
-//конструкторы
+//constructors
     private PersonOnEmma() {
         jobOnShip = JobOnShip.OTHER;
     }
@@ -40,7 +40,7 @@ public class PersonOnEmma extends Human implements Die {
     }
 
 
- //левша или правша (при создании)
+ //left- or right-handed person
     private LeftOrRightHanded randomLeftOrRightHanded(){
         float a = (float) Math.random();
         int i = Math.round(a);
@@ -50,7 +50,7 @@ public class PersonOnEmma extends Human implements Die {
     }
 
 
-//работа
+//job
     public void setJobOnShip(JobOnShip jobOnShip) {
         checkAlive("Бедный, даже после смерти работает...");
         checkCaptain(jobOnShip);
@@ -66,18 +66,16 @@ public class PersonOnEmma extends Human implements Die {
 
 
 
-//смерть
+//death
     @Override
     public void die() {
         checkAlive("Хватит его уже убивать:(");
 
-        System.out.println("\u001B[34m" + this + " умер\u001B[0m");
+        System.out.println("\u001B[35m" + this + " умер\u001B[0m");
         peopleOnEmmaArrayList.remove(this);
 
-        /*если умер капитан, надо рандомного живого человека назначить капитаном
-        при округлении, если рандомом получить число от нуля до максимального индекса, у последнего вероятность меньше
-        выпасть, так как вместо промежутка в 1, для него должно выпасть 0.5 "снизу", для первого так же
-        например, 6 человек, индексы от 0 до 5, округление рандомного должно быть от (-0.5 до 4.5]*/
+        // if captain dies, make someone captain - get index by random
+
         if (this == emmaCaptain) {
             int i;
 
@@ -93,9 +91,8 @@ public class PersonOnEmma extends Human implements Die {
 
 
 
-//руки и действия с руками
+//hands and interaction with other things
 
-    // приватный класс, контролируемо создали две руки на человека прямо во внешнем классе
             private class Hand{
                 boolean free;
                 Hand(boolean free){
@@ -107,18 +104,17 @@ public class PersonOnEmma extends Human implements Die {
 
         if(stuff.getIsHold()){
             try {
-                throw new AlreadyInHandsException();
-            } catch (AlreadyInHandsException e) {
+                throw new ImpossibleInteractionException();
+            } catch (ImpossibleInteractionException e) {
                 System.out.println("\u001B[31mЭтот предмет уже в руках\u001B[0m");
             }
 
-        //в else нормальная работа метода без ошибки с уже взятым предметом
-        }   else {
 
-            //маленькое идет в одну руку
+        }   else {
+            //small stuff takes one hand
                 if (stuff.getSize() == Stuff.Size.SMALL) {
 
-                    //левша в первую очередь занимает левую руку, если обе заняты - ошибка
+                    //left-handed person uses left hand firstly, if both hands are full, we get exception
                     if (this.leftOrRightHandedStatus == LeftOrRightHanded.LEFT_HANDED) {
                         if (leftHand.free) {
                             leftHand.free = false;
@@ -133,7 +129,7 @@ public class PersonOnEmma extends Human implements Die {
                         } else checkHands();
                     }
 
-                    //правша в первую очередь занимает правую руку, если обе заняты - ошибка
+                    //same for right-handed
                     if (this.leftOrRightHandedStatus == LeftOrRightHanded.RIGHT_HANDED) {
                         if (rightHand.free) {
                             rightHand.free = false;
@@ -148,7 +144,7 @@ public class PersonOnEmma extends Human implements Die {
                         } else checkHands();
                     }
 
-                    //большим сразу обе руки заполняем, если хоть одна занята - ошибка и не берем, иначе обе руки занимаем
+                    //not small stuff uses both the hands
                 } else {
                     if (!leftHand.free || !rightHand.free) {
                         checkHands();
@@ -165,11 +161,11 @@ public class PersonOnEmma extends Human implements Die {
 
     public void put(Stuff stuff) {
         checkAlive("...Он мёртв, кстати");
-        //если изначально обе руки свободны, значит, в руках ничего не было
+        //if both the hands are free, it means that we can't put anything
         if (!stuff.getIsHold()) {
             try {
-                throw new TwoHandsException();
-            } catch (TwoHandsException e) {
+                throw new ImpossibleInteractionException();
+            } catch (ImpossibleInteractionException e) {
                 System.out.println("\u001B[31m" + this + " не может положить то, чего у него нет\u001B[0m");
             }
         } else {
@@ -196,11 +192,11 @@ public class PersonOnEmma extends Human implements Die {
 
     public void put(Stuff stuff, Stuff stuff2){
         checkAlive("...Он мёртв, кстати");
-        //если изначально чего-то не было, это не положить
+
         if (!stuff.getIsHold() || !stuff2.getIsHold()) {
             try {
-                throw new TwoHandsException();
-            } catch (TwoHandsException e) {
+                throw new ImpossibleInteractionException();
+            } catch (ImpossibleInteractionException e) {
                 System.out.println("\u001B[31m" + this + " не может положить то, чего у него нет\u001B[0m");
             }
         } else {
@@ -216,7 +212,7 @@ public class PersonOnEmma extends Human implements Die {
 
 
 
-//Эмоции
+//Feelings
     @Override
     public void setEmotions(Emotions emotions) throws InterruptedException{
         checkAlive("...Он мёртв, кстати");
@@ -247,11 +243,9 @@ public class PersonOnEmma extends Human implements Die {
     }
 
     private void passOut() throws InterruptedException {
-        System.out.print("\u001B[34m" + this + " ");
+        System.out.print("\u001B[35m" + this + " ");
         System.out.print("теряет сознание ... ");
 
-        // Thread.sleep() - прерывание на время одного потока, при использовании нескольких потоков может вызвать ошибку
-        // InterruptedException(проблемы во взаимодействиях потоков) - оно проверяемое, его нужно обработать
         try {
             Thread.sleep(1500);
         } catch (InterruptedException e) {
@@ -265,12 +259,11 @@ public class PersonOnEmma extends Human implements Die {
     public Emotions getEmotions(){
         return emotions;
     }
-    // потеря сознания, проверки на смерть нет, так как она возникает после смены эмоций, которая уже проверила, живой ли человек
 
 
 
 
-//вспомогательное
+//Utility
     @Override
     public String toString(){
         if(name == null && jobOnShip ==JobOnShip.OTHER) {
@@ -288,20 +281,20 @@ public class PersonOnEmma extends Human implements Die {
 
 
 
-//проверки исключений
+//Exceptions searching
     private void checkAlive(String messageForDied){
         if(!peopleOnEmmaArrayList.contains(this)){
             try {
-                throw new AlreadyDeathException(messageForDied);
-            } catch (AlreadyDeathException e) {
+                throw new ImpossibleActionException(messageForDied);
+            } catch (ImpossibleActionException e) {
                 throw new RuntimeException(e);
             }
         }
     }
     private void checkHands(){
         try {
-            throw new TwoHandsException();
-        } catch (TwoHandsException e) {
+            throw new ImpossibleInteractionException();
+        } catch (ImpossibleInteractionException e) {
             System.out.println("\u001B[31m" + this + " не может взять предмет, так как у него заняты руки\u001B[0m");
         }
     }
@@ -311,13 +304,13 @@ public class PersonOnEmma extends Human implements Die {
                 emmaCaptain = this;
             } else if(emmaCaptain.hashCode() == this.hashCode()){
                 try {
-                    throw new TwoCaptainsException();
-                } catch (TwoCaptainsException e) {
+                    throw new ImpossibleActionException();
+                } catch (ImpossibleActionException e) {
                     System.out.println("\u001B[31mЭтот человек уже капитан!\u001B[0m");
                 }
             } else try {
-                throw new TwoCaptainsException();
-            } catch (TwoCaptainsException e) {
+                throw new ImpossibleActionException();
+            } catch (ImpossibleActionException e) {
                 System.out.println("\u001B[31mПрошлого капитана придётся уволить! \u001B[0m" + emmaCaptain + " теперь никто");
                 emmaCaptain.setJobOnShip(JobOnShip.OTHER);
                 emmaCaptain = this;

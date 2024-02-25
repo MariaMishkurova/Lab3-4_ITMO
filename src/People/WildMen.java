@@ -1,5 +1,6 @@
 package People;
-import Exceptions.AlreadyDeathException;
+import Exceptions.ImpossibleActionException;
+
 import java.util.ArrayList;
 
 
@@ -19,8 +20,8 @@ public class WildMen extends Human implements Die{
         if(wildMenArrayList.contains(this)) {
             this.emotions = emotions;
         } else try {
-            throw new AlreadyDeathException("\u001B[31mЭтот дикарь мёртв\u001B[0m");
-        } catch (AlreadyDeathException e) {
+            throw new ImpossibleActionException("\u001B[31mЭтот дикарь мёртв\u001B[0m");
+        } catch ( ImpossibleActionException e) {
             throw new RuntimeException(e);
         }
     }
@@ -32,9 +33,9 @@ public class WildMen extends Human implements Die{
     @Override
     public void die(){
         wildMenArrayList.remove(this);
-        System.out.println("\u001B[34mМинус один дикарь\u001B[0m");
+        System.out.println("\u001B[35mМинус один дикарь\u001B[0m");
         if(wildMenArrayList.isEmpty()){
-            System.out.println("\u001B[34mПОБЕДА!\u001B[0m Все дикари умерли");
+            System.out.println("\u001B[35mПОБЕДА!\u001B[0m Все дикари умерли");
         }
     }
     public static void howMuchWildmenStay(){
