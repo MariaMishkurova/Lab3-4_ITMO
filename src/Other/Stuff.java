@@ -35,6 +35,9 @@ public class Stuff {
                 setSize(Size.BIG);
             } else  setSize(Size.HUGE);
     }
+    public String getName(){
+        return name;
+    }
     private void setSize(Size size){
         this.size = size;
     }

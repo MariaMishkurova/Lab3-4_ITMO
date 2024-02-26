@@ -1,11 +1,15 @@
 package People;
 import Exceptions.*;
+import Other.Lokation;
+import Other.Ship;
 import Other.Stuff;
 import java.util.ArrayList;
 public class PersonOnEmma extends Human implements Die {
     private String name, surname;
     private JobOnShip jobOnShip;
     private Emotions emotions;
+    private Lokation.Lokations lokation;
+    private Ship microLokation;
     private static PersonOnEmma emmaCaptain;
     public static ArrayList<PersonOnEmma> peopleOnEmmaArrayList = new ArrayList<>();
     private final Hand leftHand, rightHand;
@@ -17,7 +21,16 @@ public class PersonOnEmma extends Human implements Die {
         rightHand = new Hand(true);
         this.leftOrRightHandedStatus = randomLeftOrRightHanded();
         this.emotions = Emotions.OK;
-
+        this.microLokation = searchEmma();
+        this.lokation = Lokation.Lokations.SOMEWHERE_IN_WATER;
+    }
+    private static Ship searchEmma(){
+        for(Ship s : Ship.shipsArrayList){
+            if(s.getName().equals("Эмма")){
+                return s;
+            }
+        }
+        return null;
     }
 
 //constructors
@@ -38,6 +51,16 @@ public class PersonOnEmma extends Human implements Die {
         this.name = name;
 
     }
+
+
+    public void setMicroLokations(Ship s){
+        this.microLokation = s;
+    }
+    public void setLokation(Lokation.Lokations lokation){
+        this.lokation = lokation;
+        System.out.println(this + " теперь " + lokation);
+    }
+
 
 
  //left- or right-handed person
@@ -67,11 +90,37 @@ public class PersonOnEmma extends Human implements Die {
 
 
 //death
+    public static void liveOnIsland() throws InterruptedException {
+        int aliveCount = 0;
+        for(PersonOnEmma p : PersonOnEmma.peopleOnEmmaArrayList){
+            aliveCount++;
+            }
+        if(aliveCount < 7){
+            try{
+                throw new ImpossibleActionException();
+            } catch (ImpossibleActionException e){
+                throw new RuntimeException("Не хватает людей для действия", e);
+            }
+        } else {
+            fall();
+            Ship.search("Йохансен").setEmotions(Emotions.SUSPICIOUS);
+        }
+    }
+    private static void fall(){
+        for (int i = 0; i < 6; i++) {
+            int index = (int) Math.round(Math.random() * (peopleOnEmmaArrayList.size() - 1) - 0.5);
+            if (!peopleOnEmmaArrayList.get(index).surname.equals("Йохансен")) {
+                System.out.println("\u001B[35m" + peopleOnEmmaArrayList.get(index) + " упал в расщелину\u001B[0m");
+                peopleOnEmmaArrayList.get(index).die();
+            } else i--;
+        }
+    }
     @Override
     public void die() {
         checkAlive("Хватит его уже убивать:(");
 
         System.out.println("\u001B[35m" + this + " умер\u001B[0m");
+        this.setLokation(Lokation.Lokations.SOMEWHERE_IN_NONEXISTENCE);
         peopleOnEmmaArrayList.remove(this);
 
         // if captain dies, make someone captain - get index by random
@@ -218,19 +267,22 @@ public class PersonOnEmma extends Human implements Die {
         checkAlive("...Он мёртв, кстати");
         this.emotions = emotions;
             Human listeners = new Human(){
+                private Lokation.Lokations lokation;
+                public void setMicroLokations(Lokation.Lokations lokation){
+                    this.lokation = Lokation.Lokations.ROOM;
+                }
                 @Override
-                void doubt(Human h){
-                    if(h.getEmotions().equals(Emotions.SUSPICIOUS)){
-                        this.emotions = Emotions.DOUBTING;
-                        System.out.println("Слушатели " + this.getEmotions());
-                    }
+                public void doubt(Object o){
+                        if(((PersonOnEmma)o).getEmotions().equals(Emotions.SUSPICIOUS)){
+                            this.emotions = Emotions.DOUBTING;
+                            System.out.println("Слушатели " + this.getEmotions());
+                        }
                 }
 
                 @Override
                 public void setEmotions(Emotions emotions){
                     this.emotions = emotions;
                 }
-                @Override
                 public Emotions getEmotions(){
                     return emotions;
                 }
@@ -255,7 +307,6 @@ public class PersonOnEmma extends Human implements Die {
         setEmotions(Emotions.OK);
     }
 
-    @Override
     public Emotions getEmotions(){
         return emotions;
     }
@@ -273,7 +324,7 @@ public class PersonOnEmma extends Human implements Die {
         } else return jobOnShip + " " + name + " " + surname + "(" + leftOrRightHandedStatus + ")";
     }
 
-    void doubt(Human h){}
+    public void doubt(Object o){}
 
     public String getSurname(){
         return this.surname;

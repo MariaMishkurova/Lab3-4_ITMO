@@ -1,11 +1,14 @@
 package People;
 import Exceptions.ImpossibleActionException;
+import Other.Lokation;
 
 import java.util.ArrayList;
 
 
 public class WildMen extends Human implements Die{
     private Emotions emotions;
+
+    private Lokation.Lokations microLokations;
     public WildMen(){}
     public static ArrayList<WildMen> wildMenArrayList = new ArrayList<>();
 
@@ -15,6 +18,9 @@ public class WildMen extends Human implements Die{
     }
 
 
+    public void setMicroLokations(Lokation.Lokations microLokations){
+        this.microLokations = microLokations;
+    }
     @Override
     public void setEmotions(Emotions emotions) {
         if(wildMenArrayList.contains(this)) {
@@ -25,7 +31,6 @@ public class WildMen extends Human implements Die{
             throw new RuntimeException(e);
         }
     }
-    @Override
     public Emotions getEmotions(){
         return this.emotions;
     }
@@ -39,8 +44,8 @@ public class WildMen extends Human implements Die{
         }
     }
     public static void howMuchWildmenStay(){
-        System.out.println("осталось " + WildMen.wildMenArrayList.size() + " дикаря");
+        System.out.println("(Осталось " + WildMen.wildMenArrayList.size() + " дикаря)");
     }
 
-    void doubt(Human h){}
+    public void doubt(Object o){}
 }

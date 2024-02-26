@@ -7,18 +7,57 @@ import java.util.ArrayList;
 
 public class Ship {
     private final String name;
+    public static ArrayList<Ship> shipsArrayList = new ArrayList<>();
     private final static ArrayList<Integer> haveMet = new ArrayList<>();
+    private Lokation.Lokations lokation;
 
+    {
+        shipsArrayList.add(this);
+
+    }
+    public Ship(String name, Lokation.Lokations startplace){
+        this.name = name;
+        this.lokation = startplace;
+    }
     public Ship(String name){
         this.name = name;
+        this.lokation = Lokation.Lokations.UNKNOWN_LAND;
     }
 
+    public void setSail(){
+        if(lokation != Lokation.Lokations.UNKNOWN_LAND){
+            System.out.println(this + " отчалил (был в " + lokation + ")");
+        }
+        this.lokation = Lokation.Lokations.SOMEWHERE_IN_WATER;
+    }
+    public void land(){
+        this.lokation = Lokation.Lokations.ISLAND;
+        //dead people aren't in arraylist, so they stay in nonexistence
+        for(PersonOnEmma p : PersonOnEmma.peopleOnEmmaArrayList){
+            p.setLokation(Lokation.Lokations.ISLAND);
+        }
+        System.out.println(this + " причалил. Теперь " + this + " " + Lokation.Lokations.ISLAND);
+
+    }
+    public Lokation.Lokations getLokation(){
+        return lokation;
+    }
+
+    public String getName(){
+        return name;
+    }
     public static void meet(Ship s, Ship s2) {
         if (s.equals(s2)) {
             try {
                 throw new ImpossibleInteractionException();
             } catch (ImpossibleInteractionException e) {
                 System.out.println("\u001B[31mСамого себя встретить нельзя\u001B[0m");
+            }
+        } else if (s.lokation != Lokation.Lokations.SOMEWHERE_IN_WATER || s2.lokation != Lokation.Lokations.SOMEWHERE_IN_WATER){
+            try{
+                throw new ImpossibleInteractionException();
+            } catch (ImpossibleInteractionException ex) {
+                System.out.println("\u001B[31mНельзя встретиться, находясь в разных местах\u001B[0m");
             }
         } else {
             if (!haveMet.contains(s.hashCode() + s2.hashCode())) {
@@ -50,13 +89,20 @@ public class Ship {
                         }
                     }
               Gun gun = new Gun();
-              gun.shoot();
-              if(!PersonOnEmma.getEmmaCaptain().getSurname().equals("Йохансен")) {
-                  PersonOnEmma.setEmmaCaptain(search("Йохансен"));
-              }
+                    if(s.lokation != Lokation.Lokations.SOMEWHERE_IN_WATER || s2.lokation != Lokation.Lokations.SOMEWHERE_IN_WATER){
+                        try {
+                            throw new ImpossibleInteractionException("\u001B[31mКорабли не могут вступать в бой не в водах\u001B[0m");
+                        } catch (ImpossibleInteractionException e) {
+                            throw new RuntimeException(e);
+                        }
+                    } else {
+                        gun.shoot();
+                        if (!PersonOnEmma.getEmmaCaptain().getSurname().equals("Йохансен")) {
+                            PersonOnEmma.setEmmaCaptain(search("Йохансен"));
+                        }
+                    }
               }
     }
-
 
     static class Weapon{
         int charge;
@@ -137,7 +183,7 @@ public class Ship {
                 }
         } else return false;
     }
-    private static PersonOnEmma search(String surname){
+    public static PersonOnEmma search(String surname){
         for(PersonOnEmma p : PersonOnEmma.peopleOnEmmaArrayList){
             if(p.getSurname().equals(surname)){
                 return p;
