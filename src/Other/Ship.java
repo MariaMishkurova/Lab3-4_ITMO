@@ -9,38 +9,38 @@ public class Ship {
     private final String name;
     public static ArrayList<Ship> shipsArrayList = new ArrayList<>();
     private final static ArrayList<Integer> haveMet = new ArrayList<>();
-    private Lokation.Lokations lokation;
+    private Location.Locations location;
 
     {
         shipsArrayList.add(this);
 
     }
-    public Ship(String name, Lokation.Lokations startplace){
+    public Ship(String name, Location.Locations startplace){
         this.name = name;
-        this.lokation = startplace;
+        this.location = startplace;
     }
     public Ship(String name){
         this.name = name;
-        this.lokation = Lokation.Lokations.UNKNOWN_LAND;
+        this.location = Location.Locations.UNKNOWN_LAND;
     }
 
     public void setSail(){
-        if(lokation != Lokation.Lokations.UNKNOWN_LAND){
-            System.out.println(this + " отчалил (был в " + lokation + ")");
+        if(location != Location.Locations.UNKNOWN_LAND){
+            System.out.println(this + " отчалил (был в " + location + ")");
         }
-        this.lokation = Lokation.Lokations.SOMEWHERE_IN_WATER;
+        this.location = Location.Locations.SOMEWHERE_IN_WATER;
     }
     public void land(){
-        this.lokation = Lokation.Lokations.ISLAND;
+        this.location = Location.Locations.ISLAND;
         //dead people aren't in arraylist, so they stay in nonexistence
         for(PersonOnEmma p : PersonOnEmma.peopleOnEmmaArrayList){
-            p.setLokation(Lokation.Lokations.ISLAND);
+            p.setLokation(Location.Locations.ISLAND);
         }
-        System.out.println(this + " причалил. Теперь " + this + " " + Lokation.Lokations.ISLAND);
+        System.out.println(this + " причалил. Теперь " + this + " " + Location.Locations.ISLAND);
 
     }
-    public Lokation.Lokations getLokation(){
-        return lokation;
+    public Location.Locations getLokation(){
+        return location;
     }
 
     public String getName(){
@@ -53,7 +53,7 @@ public class Ship {
             } catch (ImpossibleInteractionException e) {
                 System.out.println("\u001B[31mСамого себя встретить нельзя\u001B[0m");
             }
-        } else if (s.lokation != Lokation.Lokations.SOMEWHERE_IN_WATER || s2.lokation != Lokation.Lokations.SOMEWHERE_IN_WATER){
+        } else if (s.location != Location.Locations.SOMEWHERE_IN_WATER || s2.location != Location.Locations.SOMEWHERE_IN_WATER){
             try{
                 throw new ImpossibleInteractionException();
             } catch (ImpossibleInteractionException ex) {
@@ -89,7 +89,7 @@ public class Ship {
                         }
                     }
               Gun gun = new Gun();
-                    if(s.lokation != Lokation.Lokations.SOMEWHERE_IN_WATER || s2.lokation != Lokation.Lokations.SOMEWHERE_IN_WATER){
+                    if(s.location != Location.Locations.SOMEWHERE_IN_WATER || s2.location != Location.Locations.SOMEWHERE_IN_WATER){
                         try {
                             throw new ImpossibleInteractionException("\u001B[31mКорабли не могут вступать в бой не в водах\u001B[0m");
                         } catch (ImpossibleInteractionException e) {

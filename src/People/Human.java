@@ -1,8 +1,8 @@
 package People;
-import Other.Lokation;
+import Other.Location;
 
 public abstract class Human {
-    private Lokation.Lokations microLokations;
+    private Location.Locations microLocations;
     public Emotions emotions;
     public abstract void setEmotions(Emotions emotions) throws InterruptedException;
     public abstract void doubt(Object o);

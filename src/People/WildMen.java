@@ -1,6 +1,6 @@
 package People;
 import Exceptions.ImpossibleActionException;
-import Other.Lokation;
+import Other.Location;
 
 import java.util.ArrayList;
 
@@ -8,7 +8,7 @@ import java.util.ArrayList;
 public class WildMen extends Human implements Die{
     private Emotions emotions;
 
-    private Lokation.Lokations microLokations;
+    private Location.Locations microLocations;
     public WildMen(){}
     public static ArrayList<WildMen> wildMenArrayList = new ArrayList<>();
 
@@ -18,8 +18,8 @@ public class WildMen extends Human implements Die{
     }
 
 
-    public void setMicroLokations(Lokation.Lokations microLokations){
-        this.microLokations = microLokations;
+    public void setMicroLokations(Location.Locations microLocations){
+        this.microLocations = microLocations;
     }
     @Override
     public void setEmotions(Emotions emotions) {

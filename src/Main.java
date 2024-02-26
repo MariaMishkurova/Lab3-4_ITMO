@@ -22,18 +22,18 @@ public class Main{
         WildMen wild3 = new WildMen();
         WildMen wild4 = new WildMen();
         WildMen wild5 = new WildMen();
-        Ship emma = new Ship("Эмма", Lokation.Lokations.AUCKLAND);
+        Ship emma = new Ship("Эмма", Location.Locations.AUCKLAND);
         Ship bditelnaya = new Ship("Бдительная");
         Stuff idol = new Stuff("идол", 1);
 
         johansen.hold(idol);
         Human sydneyScientists = new Human(){
-            private Lokation.Lokations lokation = Lokation.Lokations.SYDNEY;
+            private Location.Locations location = Location.Locations.SYDNEY;
             @Override
             public void doubt(Object o){
                 if(((Stuff)o).getName().equals("идол")){
                     this.emotions = Emotions.DISCOURAGED;
-                    System.out.println("Ученые " + Lokation.Lokations.SYDNEY + " " + emotions + " " + o);
+                    System.out.println("Ученые " + Location.Locations.SYDNEY + " " + emotions + " " + o);
                 }
             }
             @Override

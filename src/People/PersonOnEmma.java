@@ -1,6 +1,6 @@
 package People;
 import Exceptions.*;
-import Other.Lokation;
+import Other.Location;
 import Other.Ship;
 import Other.Stuff;
 import java.util.ArrayList;
@@ -8,8 +8,8 @@ public class PersonOnEmma extends Human implements Die {
     private String name, surname;
     private JobOnShip jobOnShip;
     private Emotions emotions;
-    private Lokation.Lokations lokation;
-    private Ship microLokation;
+    private Location.Locations location;
+    private Ship microLocation;
     private static PersonOnEmma emmaCaptain;
     public static ArrayList<PersonOnEmma> peopleOnEmmaArrayList = new ArrayList<>();
     private final Hand leftHand, rightHand;
@@ -21,8 +21,8 @@ public class PersonOnEmma extends Human implements Die {
         rightHand = new Hand(true);
         this.leftOrRightHandedStatus = randomLeftOrRightHanded();
         this.emotions = Emotions.OK;
-        this.microLokation = searchEmma();
-        this.lokation = Lokation.Lokations.SOMEWHERE_IN_WATER;
+        this.microLocation = searchEmma();
+        this.location = Location.Locations.SOMEWHERE_IN_WATER;
     }
     private static Ship searchEmma(){
         for(Ship s : Ship.shipsArrayList){
@@ -54,11 +54,11 @@ public class PersonOnEmma extends Human implements Die {
 
 
     public void setMicroLokations(Ship s){
-        this.microLokation = s;
+        this.microLocation = s;
     }
-    public void setLokation(Lokation.Lokations lokation){
-        this.lokation = lokation;
-        System.out.println(this + " теперь " + lokation);
+    public void setLokation(Location.Locations location){
+        this.location = location;
+        System.out.println(this + " теперь " + location);
     }
 
 
@@ -120,7 +120,7 @@ public class PersonOnEmma extends Human implements Die {
         checkAlive("Хватит его уже убивать:(");
 
         System.out.println("\u001B[35m" + this + " умер\u001B[0m");
-        this.setLokation(Lokation.Lokations.SOMEWHERE_IN_NONEXISTENCE);
+        this.setLokation(Location.Locations.SOMEWHERE_IN_NONEXISTENCE);
         peopleOnEmmaArrayList.remove(this);
 
         // if captain dies, make someone captain - get index by random
@@ -267,9 +267,9 @@ public class PersonOnEmma extends Human implements Die {
         checkAlive("...Он мёртв, кстати");
         this.emotions = emotions;
             Human listeners = new Human(){
-                private Lokation.Lokations lokation;
-                public void setMicroLokations(Lokation.Lokations lokation){
-                    this.lokation = Lokation.Lokations.ROOM;
+                private Location.Locations location;
+                public void setMicroLokations(Location.Locations location){
+                    this.location = Location.Locations.ROOM;
                 }
                 @Override
                 public void doubt(Object o){
