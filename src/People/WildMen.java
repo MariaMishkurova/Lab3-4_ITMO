@@ -1,11 +1,10 @@
 package People;
-import Exceptions.ImpossibleActionException;
 import Other.Location;
-
+import Exceptions.ImpossibleActionException;
 import java.util.ArrayList;
 
 
-public class WildMen extends Human implements Die{
+public class WildMen extends Human implements Die, Cloneable{
     private Emotions emotions;
 
     private Location.Locations microLocations;
@@ -27,7 +26,7 @@ public class WildMen extends Human implements Die{
             this.emotions = emotions;
         } else try {
             throw new ImpossibleActionException("\u001B[31mЭтот дикарь мёртв\u001B[0m");
-        } catch ( ImpossibleActionException e) {
+        } catch (ImpossibleActionException e) {
             throw new RuntimeException(e);
         }
     }
@@ -47,5 +46,10 @@ public class WildMen extends Human implements Die{
         System.out.println("(Осталось " + WildMen.wildMenArrayList.size() + " дикаря)");
     }
 
-    public void doubt(Object o){}
+    @Override
+    public WildMen clone() throws CloneNotSupportedException{
+        wildMenArrayList.add(this);
+        return (WildMen)super.clone();
+    }
+
 }

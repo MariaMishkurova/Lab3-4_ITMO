@@ -4,7 +4,7 @@ import Other.Location;
 import Other.Ship;
 import Other.Stuff;
 import java.util.ArrayList;
-public class PersonOnEmma extends Human implements Die {
+public class PersonOnEmma extends Human implements Die, Cloneable {
     private String name, surname;
     private JobOnShip jobOnShip;
     private Emotions emotions;
@@ -153,8 +153,8 @@ public class PersonOnEmma extends Human implements Die {
 
         if(stuff.getIsHold()){
             try {
-                throw new ImpossibleInteractionException();
-            } catch (ImpossibleInteractionException e) {
+                throw new ImpossibleActionException();
+            } catch (ImpossibleActionException e) {
                 System.out.println("\u001B[31mЭтот предмет уже в руках\u001B[0m");
             }
 
@@ -213,8 +213,8 @@ public class PersonOnEmma extends Human implements Die {
         //if both the hands are free, it means that we can't put anything
         if (!stuff.getIsHold()) {
             try {
-                throw new ImpossibleInteractionException();
-            } catch (ImpossibleInteractionException e) {
+                throw new ImpossibleActionException();
+            } catch (ImpossibleActionException e) {
                 System.out.println("\u001B[31m" + this + " не может положить то, чего у него нет\u001B[0m");
             }
         } else {
@@ -244,8 +244,8 @@ public class PersonOnEmma extends Human implements Die {
 
         if (!stuff.getIsHold() || !stuff2.getIsHold()) {
             try {
-                throw new ImpossibleInteractionException();
-            } catch (ImpossibleInteractionException e) {
+                throw new ImpossibleActionException();
+            } catch (ImpossibleActionException e) {
                 System.out.println("\u001B[31m" + this + " не может положить то, чего у него нет\u001B[0m");
             }
         } else {
@@ -266,27 +266,15 @@ public class PersonOnEmma extends Human implements Die {
     public void setEmotions(Emotions emotions) throws InterruptedException{
         checkAlive("...Он мёртв, кстати");
         this.emotions = emotions;
-            Human listeners = new Human(){
-                private Location.Locations location;
-                public void setMicroLokations(Location.Locations location){
-                    this.location = Location.Locations.ROOM;
-                }
+            BehindTheScenes listeners = new BehindTheScenes(){
+                private Emotions emotions;
                 @Override
                 public void doubt(Object o){
                         if(((PersonOnEmma)o).getEmotions().equals(Emotions.SUSPICIOUS)){
                             this.emotions = Emotions.DOUBTING;
-                            System.out.println("Слушатели " + this.getEmotions());
+                            System.out.println("Слушатели " + Location.Locations.ROOM + " " + this.emotions);
                         }
                 }
-
-                @Override
-                public void setEmotions(Emotions emotions){
-                    this.emotions = emotions;
-                }
-                public Emotions getEmotions(){
-                    return emotions;
-                }
-
             };
         listeners.doubt(this);
         if(emotions.equals(Emotions.SHOCKED)){
@@ -317,17 +305,24 @@ public class PersonOnEmma extends Human implements Die {
 //Utility
     @Override
     public String toString(){
-        if(name == null && jobOnShip ==JobOnShip.OTHER) {
+        if(this.surname.equals("Неизвестный")) {
+            return surname;
+        } else if(name == null && jobOnShip ==JobOnShip.OTHER) {
             return surname + "(" + leftOrRightHandedStatus + ")";
         } else if (jobOnShip != JobOnShip.OTHER && name == null) {
             return jobOnShip + " " + surname + "(" + leftOrRightHandedStatus + ")";
         } else return jobOnShip + " " + name + " " + surname + "(" + leftOrRightHandedStatus + ")";
     }
 
-    public void doubt(Object o){}
 
     public String getSurname(){
         return this.surname;
+    }
+
+    @Override
+    public PersonOnEmma clone() throws CloneNotSupportedException{
+        peopleOnEmmaArrayList.add(this);
+        return (PersonOnEmma) super.clone();
     }
 
 
@@ -344,8 +339,8 @@ public class PersonOnEmma extends Human implements Die {
     }
     private void checkHands(){
         try {
-            throw new ImpossibleInteractionException();
-        } catch (ImpossibleInteractionException e) {
+            throw new ImpossibleActionException();
+        } catch (ImpossibleActionException e) {
             System.out.println("\u001B[31m" + this + " не может взять предмет, так как у него заняты руки\u001B[0m");
         }
     }

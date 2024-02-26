@@ -1,6 +1,5 @@
 package Other;
 import Exceptions.ImpossibleActionException;
-import Exceptions.ImpossibleInteractionException;
 import People.PersonOnEmma;
 import People.WildMen;
 import java.util.ArrayList;
@@ -15,9 +14,9 @@ public class Ship {
         shipsArrayList.add(this);
 
     }
-    public Ship(String name, Location.Locations startplace){
+    public Ship(String name, Location.Locations startPlace){
         this.name = name;
-        this.location = startplace;
+        this.location = startPlace;
     }
     public Ship(String name){
         this.name = name;
@@ -49,14 +48,14 @@ public class Ship {
     public static void meet(Ship s, Ship s2) {
         if (s.equals(s2)) {
             try {
-                throw new ImpossibleInteractionException();
-            } catch (ImpossibleInteractionException e) {
+                throw new ImpossibleActionException();
+            } catch (ImpossibleActionException e) {
                 System.out.println("\u001B[31mСамого себя встретить нельзя\u001B[0m");
             }
         } else if (s.location != Location.Locations.SOMEWHERE_IN_WATER || s2.location != Location.Locations.SOMEWHERE_IN_WATER){
             try{
-                throw new ImpossibleInteractionException();
-            } catch (ImpossibleInteractionException ex) {
+                throw new ImpossibleActionException();
+            } catch (ImpossibleActionException ex) {
                 System.out.println("\u001B[31mНельзя встретиться, находясь в разных местах\u001B[0m");
             }
         } else {
@@ -73,8 +72,8 @@ public class Ship {
     public static void battle(Ship s, Ship s2){
         if(!haveMet(s, s2)){
             try {
-                throw new ImpossibleInteractionException("\u001B[31mКорабли не могут вступать в бой, не встретившись\u001B[0m");
-            } catch (ImpossibleInteractionException e) {
+                throw new ImpossibleActionException("\u001B[31mКорабли не могут вступать в бой, не встретившись\u001B[0m");
+            } catch (ImpossibleActionException e) {
                 throw new RuntimeException(e);
             }
         }   else {
@@ -91,8 +90,8 @@ public class Ship {
               Gun gun = new Gun();
                     if(s.location != Location.Locations.SOMEWHERE_IN_WATER || s2.location != Location.Locations.SOMEWHERE_IN_WATER){
                         try {
-                            throw new ImpossibleInteractionException("\u001B[31mКорабли не могут вступать в бой не в водах\u001B[0m");
-                        } catch (ImpossibleInteractionException e) {
+                            throw new ImpossibleActionException("\u001B[31mКорабли не могут вступать в бой не в водах\u001B[0m");
+                        } catch (ImpossibleActionException e) {
                             throw new RuntimeException(e);
                         }
                     } else {
@@ -110,8 +109,8 @@ public class Ship {
             int killedPeopleOnEmmaCount = 0;
             if (WildMen.wildMenArrayList.isEmpty() || PersonOnEmma.peopleOnEmmaArrayList.size() < 4) {
                 try {
-                    throw new ImpossibleInteractionException();
-                } catch (ImpossibleInteractionException e) {
+                    throw new ImpossibleActionException();
+                } catch (ImpossibleActionException e) {
                     System.out.println("\u001B[31mУмирать некому, сражнение не произошло\u001B[0m");
                 }
             } else {

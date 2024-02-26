@@ -3,42 +3,39 @@ import People.*;
 
 public class Main{
 
-    public static void main (String [] args) throws InterruptedException{
+    public static void main (String [] args) throws InterruptedException, CloneNotSupportedException{
 
     //content based on a text
         PersonOnEmma johansen = new PersonOnEmma("Густав", "Йохансен", JobOnShip.SECOND_HELPER);
         PersonOnEmma collins = new PersonOnEmma("Коллинз", JobOnShip.CAPTAIN);
         PersonOnEmma grin = new PersonOnEmma("Грин", JobOnShip.FIRST_HELPER);
-        PersonOnEmma person1 = new PersonOnEmma("Неизвестный 1");
-        PersonOnEmma person2 = new PersonOnEmma("Неизвестный 2");
-        PersonOnEmma person3 = new PersonOnEmma("Неизвестный 3");
-        PersonOnEmma person4 = new PersonOnEmma("Неизвестный 4");
-        PersonOnEmma person5 = new PersonOnEmma("Неизвестный 5");
-        PersonOnEmma person6 = new PersonOnEmma("Неизвестный 6");
-        PersonOnEmma person7 = new PersonOnEmma("Неизвестный 7");
-        PersonOnEmma person8 = new PersonOnEmma("Неизвестный 8");
+        PersonOnEmma NoName = new PersonOnEmma("Неизвестный");
+        PersonOnEmma NoName2 = NoName.clone();
+        PersonOnEmma NoName3 = NoName.clone();
+        PersonOnEmma NoName4 = NoName.clone();
+        PersonOnEmma NoName5 = NoName.clone();
+        PersonOnEmma NoName6 = NoName.clone();
+        PersonOnEmma NoName7 = NoName.clone();
+        PersonOnEmma NoName8 = NoName.clone();
+
         WildMen wild1 = new WildMen();
-        WildMen wild2 = new WildMen();
-        WildMen wild3 = new WildMen();
-        WildMen wild4 = new WildMen();
-        WildMen wild5 = new WildMen();
+        WildMen wild2 = wild1.clone();
+        WildMen wild3 = wild1.clone();
+        WildMen wild4 = wild1.clone();
+        WildMen wild5 = wild1.clone();
         Ship emma = new Ship("Эмма", Location.Locations.AUCKLAND);
         Ship bditelnaya = new Ship("Бдительная");
         Stuff idol = new Stuff("идол", 1);
 
         johansen.hold(idol);
-        Human sydneyScientists = new Human(){
-            private Location.Locations location = Location.Locations.SYDNEY;
+        BehindTheScenes sydneyScientists = new BehindTheScenes(){
+            private Emotions emotions;
             @Override
             public void doubt(Object o){
                 if(((Stuff)o).getName().equals("идол")){
                     this.emotions = Emotions.DISCOURAGED;
                     System.out.println("Ученые " + Location.Locations.SYDNEY + " " + emotions + " " + o);
                 }
-            }
-            @Override
-            public void setEmotions(Emotions emotions){
-                this.emotions = emotions;
             }
         };
         sydneyScientists.doubt(idol);
@@ -62,29 +59,21 @@ public class Main{
         Stuff testStuff3 = new Stuff("штука2", Stuff.Size.SMALL);
         PersonOnEmma testPerson = new PersonOnEmma("Неизвестный n");
         johansen.hold(testStuff1);
-        //johansen.hold(testStuff2);
+        johansen.hold(testStuff2);
         johansen.hold(testStuff3);
-        //johansen.put(testStuff1)
+        johansen.put(testStuff1);
         testPerson.hold(testStuff2);
         johansen.hold(testStuff2);
         johansen.put(testStuff1, testStuff3);
 
 
-        Ship emmaTest2 = new Ship("Эмма");
-        Ship.meet(emmaTest2, emma);
-        //Ship.battle(emma, emmaTest2);
-
-        //testPerson.die();
-        //testPerson.setEmotions(Emotions.OK);
-        //testPerson.setJobOnShip(JobOnShip.FIRST_HELPER);
-        //testPerson.hold(testStuff1);
-        //testPerson.die();
-
-        testPerson.setJobOnShip(JobOnShip.CAPTAIN);
-
         //negative number as size
         Stuff testStuff4 = new Stuff("штука2", -2);
         System.out.println(testStuff4.getSize());
 
+
+        Ship emmaTest2 = new Ship("Эмма");
+        Ship.meet(emmaTest2, emma);
+        Ship.battle(emma, emmaTest2);
     }
 }
