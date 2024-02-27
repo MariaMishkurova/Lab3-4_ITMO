@@ -1,25 +1,22 @@
 package People;
-import Other.Location;
+import Other.*;
 import Exceptions.ImpossibleActionException;
 import java.util.ArrayList;
 
 
 public class WildMen extends Human implements Die, Cloneable{
     private Emotions emotions;
-
-    private Location.Locations microLocations;
+    private Location.Locations location;
+    private final Ship microLocation;
     public WildMen(){}
     public static ArrayList<WildMen> wildMenArrayList = new ArrayList<>();
 
     {
         wildMenArrayList.add(this);
         this.emotions = Emotions.OK;
+        this.microLocation = PersonOnEmma.searchShip("Бдительная");
     }
 
-
-    public void setMicroLokations(Location.Locations microLocations){
-        this.microLocations = microLocations;
-    }
     @Override
     public void setEmotions(Emotions emotions) {
         if(wildMenArrayList.contains(this)) {
@@ -30,13 +27,11 @@ public class WildMen extends Human implements Die, Cloneable{
             throw new RuntimeException(e);
         }
     }
-    public Emotions getEmotions(){
-        return this.emotions;
-    }
 
     @Override
     public void die(){
         wildMenArrayList.remove(this);
+        this.location = Location.Locations.SOMEWHERE_IN_NONEXISTENCE;
         System.out.println("\u001B[35mМинус один дикарь\u001B[0m");
         if(wildMenArrayList.isEmpty()){
             System.out.println("\u001B[35mПОБЕДА!\u001B[0m Все дикари умерли");

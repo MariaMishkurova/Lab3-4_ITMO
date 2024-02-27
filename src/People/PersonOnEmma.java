@@ -9,7 +9,7 @@ public class PersonOnEmma extends Human implements Die, Cloneable {
     private JobOnShip jobOnShip;
     private Emotions emotions;
     private Location.Locations location;
-    private Ship microLocation;
+    private final Ship microLocation;
     private static PersonOnEmma emmaCaptain;
     public static ArrayList<PersonOnEmma> peopleOnEmmaArrayList = new ArrayList<>();
     private final Hand leftHand, rightHand;
@@ -21,12 +21,12 @@ public class PersonOnEmma extends Human implements Die, Cloneable {
         rightHand = new Hand(true);
         this.leftOrRightHandedStatus = randomLeftOrRightHanded();
         this.emotions = Emotions.OK;
-        this.microLocation = searchEmma();
+        this.microLocation = searchShip("Эмма");
         this.location = Location.Locations.SOMEWHERE_IN_WATER;
     }
-    private static Ship searchEmma(){
+    public static Ship searchShip(String name){
         for(Ship s : Ship.shipsArrayList){
-            if(s.getName().equals("Эмма")){
+            if(s.getName().equals(name)){
                 return s;
             }
         }
@@ -53,9 +53,7 @@ public class PersonOnEmma extends Human implements Die, Cloneable {
     }
 
 
-    public void setMicroLokations(Ship s){
-        this.microLocation = s;
-    }
+
     public void setLokation(Location.Locations location){
         this.location = location;
         System.out.println(this + " теперь " + location);
